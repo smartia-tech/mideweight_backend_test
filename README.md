@@ -42,6 +42,10 @@ as target users and tailor your solution accordingly. Whether that mean
 specific structure, format of documentation, whatever else - I don't want to
 influence your choice, just show us your best approach to solving this problem.
 
+The `data_sources` or `GatewayTags`, for those interested, represent fields that 
+the hardware on the factory floor collects. For each of this we need to maintain
+the field name, measurment unit name and measurement unit type.
+
 ### The Required Code Part
 At the very least we will expect functioning, queryable API representation of
 the attached models. 
