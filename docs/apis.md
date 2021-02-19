@@ -113,3 +113,30 @@ Example:
 GET: https://smartia-tech.com/api/v1/gateway/?page=2&limit=30
 ```
 
+
+#### Error Messages
+We use standard HTTP response codes to indicate the success or failure of an API request.
+Status codes within 200 - 300 specifies a successful request
+
+Codes within 500 means something went wrong on our side while status codes within 400 - 499 means the error occured 
+mostly from the information you provided
+
+Below are the http status code we currently use
+```buildoutcfg
+200 - OK
+201 - Created successfully
+204 - Deleted successfully
+
+400 - Bad Request (check the payload data you sent)
+401 - UnAuthorized (API key is not valid or not present)
+403 - Forbidden (The API key doesn't have permission to carry out the information)
+429 - Too Many Requests (Rate limit error) - see RATE LIMIT
+500 - Server Error (We screwed up something)
+```
+
+#### Rate Limit
+All APIs are throttled and you can only make 30 requests per minutes. Any other requests
+after the first 30 requests within a minute will return a 429 status code
+
+#### Versioning
+We also support versioning, and the current version is `v1`
