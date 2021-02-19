@@ -6,7 +6,8 @@ import data_sources.views
 
 router = DefaultRouter()
 router.register(r'posse', data_sources.views.PosseView)
+router.register(r'gateway', data_sources.views.GatewayView)
 
 urlpatterns = [
-    url(_(r''), include(router.urls), name='posse'),
+    url(_(r''), include(router.urls)),
 ]
