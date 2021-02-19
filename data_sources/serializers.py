@@ -27,6 +27,11 @@ class GatewayTagSerializer(serializers.ModelSerializer):
 
 
 class GatewaySerializer(serializers.ModelSerializer):
+    posse = serializers.HyperlinkedRelatedField(
+        many=False,
+        read_only=True,
+        view_name='posse'
+    )
     tags = GatewayTagSerializer(many=True, read_only=True)
     data_flow = serializers.BooleanField()
 
