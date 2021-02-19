@@ -137,3 +137,5 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend'
     ]
 }
+
+SMARTIA_API_KEY = "slbnkmdysqpxyzwacwpztjfikptx"
