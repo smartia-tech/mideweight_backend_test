@@ -27,7 +27,6 @@ class BaseGatewaySerializer(serializers.ModelSerializer):
         model = Gateway
         fields = '__all__'
 
-
 class ReferenceGatewayStatusSerializer(BaseGatewayStatusSerializer):
     # showing gateway in status object for a verbose request in /gateway is unnecessary.
     # It would only use more resources
@@ -49,8 +48,8 @@ class ReferenceBaseGatewaySerializer(BaseGatewaySerializer):
 
 
 class GatewaySerializer(BaseGatewaySerializer):
-    tags = serializers.PrimaryKeyRelatedField(queryset=GatewayTag.objects.all(), many=True)
-    status = serializers.PrimaryKeyRelatedField(queryset=GatewayStatus.objects.all(), many=True)
+    tags = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+    status = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
 
     def to_representation(self, instance):
         if is_request_verbose(self.context.get('request')):
