@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Posse, Gateway, GatewayStatus, GatewayTag
+from data_sources.models import Posse, Gateway, GatewayStatus, GatewayTag
 
 
 class PosseSerializer(serializers.ModelSerializer):
