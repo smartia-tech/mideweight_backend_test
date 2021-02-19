@@ -135,7 +135,13 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'
-    ]
+    ],
+    'DEFAULT_THROTTLE_CLASSES': [
+        'libs.throttles.SmartiaRateLimit',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'gateway': '30/min'
+    }
 }
 
 SMARTIA_API_KEY = "slbnkmdysqpxyzwacwpztjfikptx"
