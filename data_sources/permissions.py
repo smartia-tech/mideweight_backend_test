@@ -7,9 +7,10 @@ class HasAPIAccess(permissions.BasePermission):
 
     def has_permission(self, request, view):
         api_key = request.META.get('HTTP_AUTHORIZATION', '')
+        print(api_key)
         if not api_key:
             return False
         try:
-            return api_key == settings.SMARTIA_API_KEY.split('Bearer ')[1]
+            return api_key.split('Bearer ')[1] == settings.SMARTIA_API_KEY
         except IndexError:
             return False
