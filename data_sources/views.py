@@ -1,5 +1,8 @@
+from itertools import chain
+
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter
+from rest_framework.exceptions import ValidationError
 from django_filters.rest_framework import DjangoFilterBackend
 
 from data_sources.models import Posse, Gateway, GatewayStatus, GatewayTag
@@ -42,3 +45,21 @@ class GatewayTagView(ModelViewSet):
     throttle_classes = [SmartiaRateLimit]
     filter_backends = (DjangoFilterBackend, SearchFilter,)
     search_fields = ('gateway__label', 'label', 'hardware_name')
+
+    def get_queryset(self):
+        unit_type = self.request.GET.get('unit_type')
+        status_type = self.request.GET.get('status')
+        self.validate_filter_value(unit_type, GatewayTag.UNIT_TYPES, 'unit type')
+        self.validate_filter_value(status_type, GatewayTag.STATUSES, 'status')
+        filter_fields = {}
+        if unit_type:
+            filter_fields['unit_type'] = unit_type
+        if status_type:
+            filter_fields['status'] = status_type
+        return GatewayTag.objects.filter(**filter_fields)
+
+    def validate_filter_value(self, value, choices, label):
+        if value:
+            formatted_choices = [choice[0] for choice in choices]
+            if not value in formatted_choices:
+                raise ValidationError("{} has to be one of {}".format(label, formatted_choices))

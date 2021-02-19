@@ -154,3 +154,9 @@ Below are the fields your search value will look into
 - gateway endpoint - searches from [gateway label, posse label, location, serial_number]. i.e you can search from any of the fields in the array
 - gateway-status - searches from [status label, gateway label, hostname, os_name]
 - gateway-tag - searches from [tag label, gateway label, hardware_name]
+
+
+Also, you can filter `unit_type` and/or `status` from gateway-tags
+```buildoutcfg
+/gateway-tags/?unit_type=bool&status=active
+```
