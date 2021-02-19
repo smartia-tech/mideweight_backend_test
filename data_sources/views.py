@@ -1,7 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
 
-from data_sources.models import Posse, Gateway
-from data_sources.serializers import PosseSerializer, GatewaySerializer
+from data_sources.models import Posse, Gateway, GatewayStatus
+from data_sources.serializers import PosseSerializer, GatewaySerializer, GatewayStatusSerializer
 from data_sources.permissions import HasAPIAccess
 from libs.throttles import SmartiaRateLimit
 
@@ -18,3 +18,10 @@ class GatewayView(ModelViewSet):
     serializer_class = GatewaySerializer
     permission_classes = (HasAPIAccess,)
     throttle_classes = [SmartiaRateLimit]
+
+class GatewayStatusView(ModelViewSet):
+    queryset = GatewayStatus.objects.all()
+    serializer_class = GatewayStatusSerializer
+    permission_classes = (HasAPIAccess,)
+    throttle_classes = [SmartiaRateLimit]
+

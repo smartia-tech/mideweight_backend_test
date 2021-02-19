@@ -7,7 +7,6 @@ class HasAPIAccess(permissions.BasePermission):
 
     def has_permission(self, request, view):
         api_key = request.META.get('HTTP_AUTHORIZATION', '')
-        print(api_key)
         if not api_key:
             return False
         try:

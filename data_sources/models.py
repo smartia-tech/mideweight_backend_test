@@ -63,6 +63,10 @@ class Gateway(DataSource):
         return self.gatewaytag_set.all()
 
     @property
+    def status(self):
+        return self.gatewaystatus_set.all()
+
+    @property
     def data_flow(self) -> bool:
         gateway_status = self.gatewaystatus_set.filter(gateway_id=self.id)
         if gateway_status.count() > 0:
@@ -83,6 +87,10 @@ class GatewayStatus(DataSourceBaseModel):
 
     class Meta:
         get_latest_by = 'created_at'
+
+    @property
+    def datasource(self) -> DataSource:
+        return self.gateway
 
 
 class AbstractTag(DataSourceBaseModel):

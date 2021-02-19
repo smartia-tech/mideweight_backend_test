@@ -7,6 +7,7 @@ import data_sources.views
 router = DefaultRouter()
 router.register(r'posse', data_sources.views.PosseView)
 router.register(r'gateway', data_sources.views.GatewayView)
+router.register(r'gateway-status', data_sources.views.GatewayStatusView)
 
 urlpatterns = [
     url(_(r''), include(router.urls)),
