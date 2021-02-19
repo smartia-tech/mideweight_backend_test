@@ -7,6 +7,7 @@
 - Error Message
 - Rate Limit
 - Versioning
+- Searching & Filtering
 
 
 #### Introduction
@@ -140,3 +141,16 @@ after the first 30 requests within a minute will return a 429 status code
 
 #### Versioning
 We also support versioning, and the current version is `v1`
+
+
+#### Searching & Filtering
+To search for any information in an endpoint, pass the value in a query parameter as shown below
+```buildoutcfg
+endpoint/?search='Posse Label'
+```
+
+Below are the fields your search value will look into
+- posse endpoint - Since it contains only label and id property, you can only search a label
+- gateway endpoint - searches from [gateway label, posse label, location, serial_number]. i.e you can search from any of the fields in the array
+- gateway-status - searches from [status label, gateway label, hostname, os_name]
+- gateway-tag - searches from [tag label, gateway label, hardware_name]
