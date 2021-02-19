@@ -1,3 +1,5 @@
+from django.urls import path, include
+
 from data_sources.views import GatewaysView
 
 gateway_list = GatewaysView.as_view({
@@ -9,6 +11,6 @@ gateway_retrive = GatewaysView.as_view({
 })
 
 urlpatterns = [
-    path('gateways/', gateway_list, 'gateway-list'),
-    path('gateways/<int:pk>/', gateway_retrive, 'gateway')
+    path('gateways/', gateway_list, name='gateway-list'),
+    path('gateways/<int:pk>/', gateway_retrive, name='gateway')
 ]
