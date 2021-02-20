@@ -154,3 +154,31 @@ class TestGatewayView(TestCase):
 
         self.assertEqual(len(response.data['results']), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+        # test filter tags
+        response = self.client.get(path='{}?unit_type=DOES NOT EXISTS'.format(self.gateway_tag_url),
+                                   HTTP_AUTHORIZATION='Bearer slbnkmdysqpxyzwacwpztjfikptx')
+
+        unit_choices = [choice[0] for choice in GatewayTag.UNIT_TYPES]
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, ["unit type has to be one of {}".format(unit_choices)])
+
+        response = self.client.get(path='{}?status=DOES NOT EXISTS'.format(self.gateway_tag_url),
+                                   HTTP_AUTHORIZATION='Bearer slbnkmdysqpxyzwacwpztjfikptx')
+
+        status_choice = [choice[0] for choice in GatewayTag.STATUSES]
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, ["status has to be one of {}".format(status_choice)])
+
+        response = self.client.get(path='{}?status={}'.format(self.gateway_tag_url, GatewayTag.STATUSES[1][0]),
+                                   HTTP_AUTHORIZATION='Bearer slbnkmdysqpxyzwacwpztjfikptx')
+        # gateway tag with the filtered status has no data
+        self.assertEqual(len(response.data['results']), 0)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        response = self.client.get(path='{}?status={}'.format(self.gateway_tag_url, GatewayTag.STATUSES[0][0]),
+                                   HTTP_AUTHORIZATION='Bearer slbnkmdysqpxyzwacwpztjfikptx')
+        # gateway tag with the filtered status has data
+        self.assertEqual(len(response.data['results']), 1)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
