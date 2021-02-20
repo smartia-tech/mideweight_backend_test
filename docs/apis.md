@@ -152,7 +152,7 @@ endpoint/?search='Posse Label'
 Below are the fields your search value will look into
 - posse endpoint - Since it contains only label and id property, you can only search a label
 - gateway endpoint - searches from [gateway label, posse label, location, serial_number]. i.e you can search from any of the fields in the array
-- gateway-status - searches from [status label, gateway label, hostname, os_name]
+- gateway-status - searches from [gateway label, hostname, os_name]
 - gateway-tag - searches from [tag label, gateway label, hardware_name]
 
 

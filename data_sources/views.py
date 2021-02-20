@@ -35,7 +35,7 @@ class GatewayStatusView(ModelViewSet):
     permission_classes = (HasAPIAccess,)
     throttle_classes = [SmartiaRateLimit]
     filter_backends = (DjangoFilterBackend, SearchFilter,)
-    search_fields = ('gateway__label', 'label', 'hostname', 'os_name',)
+    search_fields = ('gateway__label', 'hostname', 'os_name',)
 
 
 class GatewayTagView(ModelViewSet):
