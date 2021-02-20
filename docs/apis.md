@@ -72,7 +72,7 @@ If this api has nested objects like tags, status, by default we will only return
     
 ```
 
-If you want the actual nested data itself other than the IDs, i.e more verbose, you can always append a query parameter of "response = verbose"
+If you want the actual nested data itself, i.e more verbose, you can always append a query parameter of "response = verbose"
 e.g
 ```buildoutcfg
 GET: https://smartia-tech.com/api/v1/gateway/?response=verbose
@@ -106,12 +106,10 @@ To return a paginated response, you have two different query parameters (page, l
 
 - page: This denotes the page you want to fetch.
     It's REQUIRED for pagination and it must be an INTEGER, e.g 5
-- limit: This denotes the number of data you want to fetch per requests. It defaults to 20 as it's not required and
-it must also be an integer. The value ranges from 1 - 50
 
 Example:
 ```buildoutcfg
-GET: https://smartia-tech.com/api/v1/gateway/?page=2&limit=30
+GET: https://smartia-tech.com/api/v1/gateway/?page=2
 ```
 
 

@@ -27,6 +27,7 @@ class BaseGatewaySerializer(serializers.ModelSerializer):
         model = Gateway
         fields = '__all__'
 
+
 class ReferenceGatewayStatusSerializer(BaseGatewayStatusSerializer):
     # showing gateway in status object for a verbose request in /gateway is unnecessary.
     # It would only use more resources
