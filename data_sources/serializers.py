@@ -29,7 +29,7 @@ class GatewayTagSerializers(serializers.ModelSerializer):
         model = GatewayTag
         fields = ('__all__')
     
-    def get_created_at(self, obj: GatewayTag) -> str:
+    def get_created_at(self, obj) -> str:
         '''
         format the returned created time, make it more readable
         '''
@@ -37,7 +37,7 @@ class GatewayTagSerializers(serializers.ModelSerializer):
         formated_time = time.strftime("%Y-%m-%d %H:%M:%S")
         return formated_time
     
-    def get_updated_at(self, obj: GatewayTag) -> str:
+    def get_updated_at(self, obj) -> str:
         '''
         format the returned updated time, make it more readable
         '''
@@ -60,7 +60,7 @@ class GatewaySerializer(serializers.ModelSerializer):
         model = Gateway
         fields = "__all__"
     
-    def get_created_at(self, obj: Gateway) -> str:
+    def get_created_at(self, obj) -> str:
         '''
         format the returned created time, make it more readable
         '''
@@ -68,7 +68,7 @@ class GatewaySerializer(serializers.ModelSerializer):
         formated_time = time.strftime("%Y-%m-%d %H:%M:%S")
         return formated_time
     
-    def get_updated_at(self, obj: Gateway) -> str:
+    def get_updated_at(self, obj) -> str:
         '''
         format the returned updated time, make it more readable
         '''
@@ -87,7 +87,7 @@ class GatewayStatusSerializer(serializers.ModelSerializer):
         model = GatewayStatus
         fields = ('__all__')
     
-    def get_created_at(self, obj: GatewayStatus) -> str:
+    def get_created_at(self, obj) -> str:
         '''
         format the returned created time, make it more readable
         '''
@@ -95,7 +95,7 @@ class GatewayStatusSerializer(serializers.ModelSerializer):
         formated_time = time.strftime("%Y-%m-%d %H:%M:%S")
         return formated_time
     
-    def get_updated_at(self, obj: GatewayStatus) -> str:
+    def get_updated_at(self, obj) -> str:
         '''
         format the returned updated time, make it more readable
         '''
