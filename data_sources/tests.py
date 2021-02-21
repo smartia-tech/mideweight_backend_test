@@ -34,6 +34,26 @@ class PosseTestcase(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['id'], specific_id)
         self.assertEqual(res.data['label'], 'Mexican')
+    
+    def test_endpoint_is_paginated(self):
+        '''
+        test that endpoints are paginated and not more than 15 items
+        '''
+        get_url = reverse('posse-list')
+        res = self.client.get(get_url)
+        self.assertContains(res, 'count')
+        self.assertFalse(res.data['count'] > 15)
+    
+    def test_detail_returns_404(self):
+        '''
+        test enpoint for getting specific posse returns 404 if object provied does not exist
+        '''
+        specific_id = 12
+        get_url = reverse('posse-detail', args=(specific_id,))
+        res = self.client.get(get_url)
+        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+        print(res.data['detail'])
+        self.assertEqual(str(res.data['detail']), str('Not found.'))
 
 
 class GatewayTestcase(APITestCase):
@@ -75,6 +95,25 @@ class GatewayTestcase(APITestCase):
         active_instances = Gateway.objects.filter(posse__label='Australian')
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data['results']), active_instances.count())
+    
+    def test_endpoint_is_paginated(self):
+        '''
+        test that endpoints are paginated and not more than 15 items
+        '''
+        get_url = reverse('gateway-list')
+        res = self.client.get(get_url)
+        self.assertContains(res, 'count')
+        self.assertFalse(res.data['count'] > 15)
+    
+    def test_detail_returns_404(self):
+        '''
+        test enpoint for getting specific gateway returns 404 if object provied does not exist
+        '''
+        specific_id = 12
+        get_url = reverse('gateway-detail', args=(specific_id,))
+        res = self.client.get(get_url)
+        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(str(res.data['detail']), str('Not found.'))
 
 
 class GatewayStatusTestcase(APITestCase):
@@ -118,6 +157,25 @@ class GatewayStatusTestcase(APITestCase):
         active_instances = GatewayStatus.objects.filter(os_name='linux')
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data['results']), active_instances.count())
+    
+    def test_endpoint_is_paginated(self):
+        '''
+        test that endpoints are paginated and not more than 15 items
+        '''
+        get_url = reverse('gatewaystatus-list')
+        res = self.client.get(get_url)
+        self.assertContains(res, 'count')
+        self.assertFalse(res.data['count'] > 15)
+    
+    def test_detail_returns_404(self):
+        '''
+        test enpoint for getting specific gatewaystatus returns 404 if object provied does not exist
+        '''
+        specific_id = 12
+        get_url = reverse('gatewaystatus-detail', args=(specific_id,))
+        res = self.client.get(get_url)
+        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(str(res.data['detail']), str('Not found.'))
 
 
 class GatewayTagTestcase(APITestCase):
@@ -135,7 +193,7 @@ class GatewayTagTestcase(APITestCase):
 
     def test_list_gatewaytag(self):
         '''
-        test enpoint for getting list of gatewaystatuses
+        test enpoint for getting list of gatewaytag
         '''
         get_url = reverse('gatewaytag-list')
         res = self.client.get(get_url)
@@ -145,7 +203,7 @@ class GatewayTagTestcase(APITestCase):
     
     def test_detail_gatewaytag(self):
         '''
-        test enpoint for getting specific gatewaystatus
+        test enpoint for getting specific gatewaytag
         '''
         specific_id = 3
         get_url = reverse('gatewaytag-detail', args=(specific_id,))
@@ -153,6 +211,16 @@ class GatewayTagTestcase(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['id'], specific_id)
         self.assertEqual(res.data['label'], 'spaceX')
+    
+    def test_detail_returns_404(self):
+        '''
+        test enpoint for getting specific gatewaytag returns 404 if object provied does not exist
+        '''
+        specific_id = 12
+        get_url = reverse('gatewaytag-detail', args=(specific_id,))
+        res = self.client.get(get_url)
+        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(str(res.data['detail']), str('Not found.'))
     
     def test_search_filter(self):
         '''
@@ -163,3 +231,13 @@ class GatewayTagTestcase(APITestCase):
         active_instances = GatewayTag.objects.filter(status='active')
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data['results']), active_instances.count())
+    
+    def test_endpoint_is_paginated(self):
+        '''
+        test that endpoints are paginated and not more than 15 items
+        '''
+        get_url = reverse('gatewaytag-list')
+        res = self.client.get(get_url)
+        self.assertContains(res, 'count')
+        self.assertFalse(res.data['count'] > 15)
+    
