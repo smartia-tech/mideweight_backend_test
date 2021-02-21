@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from data_sources.models import Posse, Gateway, GatewayStatus, GatewayTag
 
@@ -24,6 +25,13 @@ class GatewaySerializer(serializers.ModelSerializer):
         model = Gateway
         fields = '__all__'
 
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Gateway.objects.all(),
+                fields=['label', 'serial_number']
+            )
+        ]
+
 
 class GatewayStatusSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(
@@ -42,8 +50,18 @@ class GatewayTagSerializer(serializers.ModelSerializer):
         view_name="gatewaytag-detail")
     gateway_url = serializers.HyperlinkedIdentityField(
         view_name="gateway-detail")
-    gateway_id = serializers.CharField(write_only=True, source='gateway')
+    gateway_id = serializers.CharField(write_only=True)
 
     class Meta:
         model = GatewayTag
         exclude = ('gateway',)
+        validators = [
+            UniqueTogetherValidator(
+                queryset=GatewayTag.objects.all(),
+                fields=['gateway', 'label']
+            ),
+            UniqueTogetherValidator(
+                queryset=GatewayTag.objects.all(),
+                fields=['gateway', 'hardware_name']
+            )
+        ]
