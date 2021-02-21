@@ -87,7 +87,7 @@ class GatewayStatusSerializer(serializers.ModelSerializer):
         model = GatewayStatus
         fields = ('__all__')
     
-    def get_created_at(self, obj: Gateway) -> str:
+    def get_created_at(self, obj: GatewayStatus) -> str:
         '''
         format the returned created time, make it more readable
         '''
@@ -95,7 +95,7 @@ class GatewayStatusSerializer(serializers.ModelSerializer):
         formated_time = time.strftime("%Y-%m-%d %H:%M:%S")
         return formated_time
     
-    def get_updated_at(self, obj: Gateway) -> str:
+    def get_updated_at(self, obj: GatewayStatus) -> str:
         '''
         format the returned updated time, make it more readable
         '''
