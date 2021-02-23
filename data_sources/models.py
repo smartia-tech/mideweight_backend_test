@@ -60,7 +60,7 @@ class Gateway(DataSource):
 
     @property
     def tags(self):
-        return self.gatewaytag_set.all()
+        return self.gatewaytag_set.values()
 
     @property
     def data_flow(self) -> bool:
