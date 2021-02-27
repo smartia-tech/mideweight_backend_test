@@ -47,7 +47,7 @@ class GatewayTagApiView(generics.ListCreateAPIView):
     filter_backends = (filters.SearchFilter, )
     filter_fields = []
     ordering_fields = []
-    search_fields = ("^label", "^hardware_name", "^unit_name")
+    search_fields = ("hardware_name", "unit_name")
 
 
 class GatewayTagDetailApiView(generics.RetrieveUpdateDestroyAPIView):
@@ -63,7 +63,7 @@ class GatewayStatusApiView(generics.ListCreateAPIView):
     filter_backends = (filters.SearchFilter, )
     filter_fields = []
     ordering_fields = []
-    search_fields = ("^label", "^hardware_name", "^unit_name")
+    search_fields = ("host_name", "os_name")
 
 
 class GatewayStatusDetailApiView(generics.RetrieveUpdateDestroyAPIView):
