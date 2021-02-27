@@ -83,6 +83,7 @@ class GatewayStatus(DataSourceBaseModel):
 
     class Meta:
         get_latest_by = 'created_at'
+        verbose_name_plural = "Gateway statuses"
 
 
 class AbstractTag(DataSourceBaseModel):

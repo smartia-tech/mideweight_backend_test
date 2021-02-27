@@ -223,4 +223,8 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+logs/
+logs
+db.sqlite3
 
+.vagrant/
