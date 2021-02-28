@@ -137,6 +137,19 @@ class TestGatewayViewSet(ApiTestBase):
             "serial_number": "HQHF-25545"
         }
 
+    def test_create_unique_label_and_serial_number(self, client_api):
+        gateway = self.factory()
+        payload = copy(self.create_payload)
+        payload["label"] = gateway.label
+        payload["serial_number"] = gateway.serial_number
+
+        url = reverse(f"{self.basename}-list")
+        response = client_api.post(url, data=payload)
+        response_data = response.data
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "Label and serial number must be unique" in response_data["non_field_errors"][0]
+
 
 class TestGatewayStatusViewSet(ApiTestBase):
     model = GatewayStatus
@@ -206,3 +219,30 @@ class TestGatewayTagViewSet(ApiTestBase):
             "hardware_name": "test_hardware_name",
             "serial_number": "HQHF-25545"
         }
+
+    def test_create_unique_gateway_and_label(self, client_api):
+        gateway_tag = self.factory()
+        payload = copy(self.create_payload)
+        payload["label"] = gateway_tag.label
+        payload["gateway_id"] = gateway_tag.gateway.id
+
+        url = reverse(f"{self.basename}-list")
+        response = client_api.post(url, data=payload)
+        response_data = response.data
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "Gateway_id and label must be unique" in response_data["non_field_errors"][0]
+
+    def test_create_unique_gateway_and_hardware_name(self, client_api):
+        gateway_tag = self.factory()
+        payload = copy(self.create_payload)
+        payload["hardware_name"] = gateway_tag.hardware_name
+        payload["gateway_id"] = gateway_tag.gateway.id
+
+        url = reverse(f"{self.basename}-list")
+        response = client_api.post(url, data=payload)
+        response_data = response.data
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "Gateway_id and hardware_name must be unique" in response_data["non_field_errors"][0]
+
