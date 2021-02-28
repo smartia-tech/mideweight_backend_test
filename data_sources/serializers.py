@@ -20,11 +20,13 @@ class GatewaySerializer(serializers.ModelSerializer):
         model = Gateway
         fields = "__all__"
         read_only = ("type_name",)
-        validators = (UniqueTogetherValidator(
-            queryset=Gateway.objects.all(),
-            fields=('label', 'serial_number'),
-            message='Label and serial number must be unique',
-        ), )
+        validators = (
+            UniqueTogetherValidator(
+                queryset=Gateway.objects.all(),
+                fields=('label', 'serial_number'),
+                message='Label and serial number must be unique',
+            ),
+        )
 
 
 class GatewayStatusSerializer(serializers.ModelSerializer):
