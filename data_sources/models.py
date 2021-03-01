@@ -60,7 +60,7 @@ class Gateway(DataSource):
 
     @property
     def tags(self):
-        return self.gatewaytag_set.all()
+        return self.gatewaytag_set.values()
 
     @property
     def data_flow(self) -> bool:
@@ -83,6 +83,10 @@ class GatewayStatus(DataSourceBaseModel):
 
     class Meta:
         get_latest_by = 'created_at'
+        verbose_name_plural = 'Gateway Status'
+
+    def __str__(self):
+        return self.gateway.label
 
 
 class AbstractTag(DataSourceBaseModel):
@@ -137,4 +141,4 @@ class GatewayTag(AbstractTag):
 
     @property
     def datasource(self) -> DataSource:
-        return self.gateway
+        return self.gateway.label
