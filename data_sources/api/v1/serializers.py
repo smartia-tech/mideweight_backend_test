@@ -35,6 +35,16 @@ class GatewayTagSerializer(serializers.ModelSerializer):
 
 class GatewaySerializer(serializers.ModelSerializer):
     """
+    Post Serializer for Gateway Model
+    """
+
+    class Meta:
+        model = Gateway
+        fields = "__all__"
+
+
+class GatewayGetSerializer(serializers.ModelSerializer):
+    """
     Serializer for Gateway Model
     """
 

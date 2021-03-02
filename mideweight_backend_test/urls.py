@@ -16,6 +16,9 @@ Including another URLconf
 from rest_framework import permissions
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
+import os
+from drf_yasg.generators import OpenAPISchemaGenerator
+
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include, re_path
@@ -29,6 +32,14 @@ urlpatterns = [
 
 # adding swagger documentation to /api/root as openapi schema viewer
 
+
+class SchemaGenerator(OpenAPISchemaGenerator):
+    def get_schema(self, request=None, public=False):
+        schema = super(SchemaGenerator, self).get_schema(request, public)
+        schema.basePath = os.path.join(schema.basePath, 'api/v1/')
+        return schema
+
+
 schema_view = get_schema_view(
     openapi.Info(
         title="Smartia API",
@@ -37,7 +48,8 @@ schema_view = get_schema_view(
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
-    urlconf="api.v1.urls"
+    urlconf="api.v1.urls",
+    generator_class=SchemaGenerator,
 )
 
 urlpatterns += [
