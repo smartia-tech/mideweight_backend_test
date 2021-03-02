@@ -18,21 +18,6 @@ class PosseSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class GatewayTagSerializer(serializers.ModelSerializer):
-    """
-    serializer for GatewayTag instances
-    """
-
-    datasource = serializers.SerializerMethodField()
-
-    class Meta:
-        model = GatewayTag
-        fields = "__all__"
-
-    def get_datasource(self, obj):
-        return obj.datasource
-
-
 class GatewaySerializer(serializers.ModelSerializer):
     """
     Post Serializer for Gateway Model
@@ -45,7 +30,7 @@ class GatewaySerializer(serializers.ModelSerializer):
 
 class GatewayGetSerializer(serializers.ModelSerializer):
     """
-    Serializer for Gateway Model
+    Get Serializer for Gateway Model
     """
 
     class Meta:
@@ -61,3 +46,75 @@ class GatewayGetSerializer(serializers.ModelSerializer):
                 read_only=True
             )
         return fields
+
+
+class GatewayStatusSerializer(serializers.ModelSerializer):
+    """
+    Gateway status Post Serializer
+    """
+
+    class Meta:
+        model = GatewayStatus
+        fields = "__all__"
+
+
+class GatewayStatusGetSerializer(serializers.ModelSerializer):
+    """
+    Gateway status Get Serializer
+    """
+
+    class Meta:
+        model = GatewayStatus
+        fields = "__all__"
+
+    def get_fields(self):
+        fields = super().get_fields()
+        request = self.context.get('request')
+        if request and request.method.upper() == 'GET':
+            fields['gateway'] = GatewayGetSerializer(
+                context=self.context,
+                read_only=True
+            )
+        return fields
+
+
+class GatewayTagSerializer(serializers.ModelSerializer):
+    """
+    Post serializer for GatewayTag
+    """
+
+    class Meta:
+        model = GatewayTag
+        fields = "__all__"
+
+        extra_kwargs = {
+            'unit_name': {
+                'required': True,
+                'allow_blank': False,
+            }
+        }
+
+
+class GatewayTagGetSerializer(serializers.ModelSerializer):
+    """
+    Get serializer for GatewayTag 
+    """
+
+    datasource = serializers.SerializerMethodField()
+
+    class Meta:
+        model = GatewayTag
+        fields = "__all__"
+
+    def get_fields(self):
+        fields = super().get_fields()
+        request = self.context.get('request')
+        if request and request.method.upper() == 'GET':
+            fields['gateway'] = GatewayGetSerializer(
+                context=self.context,
+                read_only=True
+            )
+        return fields
+
+    def get_datasource(self, obj):
+        return obj.datasource
