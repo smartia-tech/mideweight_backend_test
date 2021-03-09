@@ -221,7 +221,17 @@ class GatewayStatusApiView(APIView):
 class GatewayTagAPIView(ModelViewSet):
     # Fetch data from the database
     queryset = GatewayTag.objects.all()
-    serializer = GatewayTagSerializer
+    serializer_class = GatewayTagSerializer
 
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = [field.name for field in GatewayTag._meta.fields]
+
+
+# End Tag view Section
+# Start Posse View Section
+class PosseApiView(ModelViewSet):
+    # Define model instance
+    model = Posse
+
+    queryset = model.objects.all()
+    serializer_class = PosseSerializer
