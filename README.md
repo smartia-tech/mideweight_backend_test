@@ -1,3 +1,8 @@
+-----------------------
+**This file has been left unchanged** See [MySolution](MySolution.md) for documentation of my solution. 
+
+-----------------------
+
 # The API - Smartia Backend Developer Challenge
 
 This repository contains the Smartia backend challenge, as well as instructions for setting up the environment.
