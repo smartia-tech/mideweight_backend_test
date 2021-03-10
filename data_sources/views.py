@@ -16,7 +16,6 @@ from data_sources.serializers import GatewaySerializer, PosseSerializer, DataSou
 
 # Gateway View Section
 class ClientGatewayApiView(APIView):
-    # TODO: Add authentication
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -151,7 +150,9 @@ class GatewayApiView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
+
         """Post Gateway Data"""
+
         data = {
             'label': request.data.get('label'),
             'posse': request.data.get('posse'),
@@ -174,21 +175,24 @@ class GatewayApiView(APIView):
 # As it can be assumed that statusses are updated automatically,
 # It should not be able to be edited via the API
 class GatewayStatusApiView(APIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+
+    # authentication_classes = [SessionAuthentication, BasicAuthentication]
+    # permission_classes = [IsAuthenticated]
 
     def get_gateway_status_object(self, **kwargs):
 
-        if kwargs:
+        """Retrieve ALL Gateway Status Object Data from Model"""
+
+        if not kwargs:
+            try:
+                gateway_object = GatewayStatus.objects.all()
+                return gateway_object, ''
+            except Gateway.DoesNotExist as gateway_error:
+                return None, gateway_error.message
+        else:
             filter_dict = {k: v for k, v in kwargs}
             try:
                 gateway_status_object = GatewayStatus.objects.filter(**filter_dict)
-                return gateway_status_object, ''
-            except GatewayStatus.DoesNotExist as gateway_status_error:
-                return None, gateway_status_error
-        else:
-            try:
-                gateway_status_object = GatewayStatus.objects.all()
                 return gateway_status_object, ''
             except Gateway.DoesNotExist as gateway_status_error:
                 return None, gateway_status_error.message
@@ -196,21 +200,71 @@ class GatewayStatusApiView(APIView):
     def get(self, request, **kwargs):
 
         if kwargs:
-            gateway_status_instance, gateway_status_error = self.get_gateway_status_object(kwargs=kwargs)
+            gateway_status_instance = self.get_gateway_status_object(kwargs=kwargs)
         else:
-            gateway_status_instance, gateway_status_error = self.get_gateway_status_object()
+            gateway_status_instance = self.get_gateway_status_object()
 
         if not gateway_status_instance:
             return Response(
-                {"res": "Gateway Status Object with specified Parameters does not Exist"},
+                {"res": "Gateway Object with specified Paramaters does not Exist"},
                 status=status.HTTP_400_BAD_REQUEST)
 
         serializer = GatewayStatusSerializer(gateway_status_instance)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
+    def put(self, request, **kwargs):
+        """Update Gateway Status Manually if the need arises"""
+
+        if kwargs:
+            gateway_status_instance, gateway_status_error = self.get_gateway_status_object(kwargs=kwargs)
+        else:
+            gateway_instance, gateway_error = self.get_gateway_status_object()
+
+        if not gateway_status_instance:
+            return Response(
+                {"res": "Gateway Object with specified Paramaters does not Exist"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        data={
+            'gateway': request.data.get('gateway'),
+            'hostname': request.data.get('hostname'),
+            'data_flow': request.data.get('data_flow'),
+            'os_name': request.data.get('os_name'),
+            'os_version': request.data.get('os_version'),
+            'firmware_version': request.data.get('firmware_version'),
+            'maio_edge_version': request.data.get('maio_edge_version'),
+            'created_at': request.data.get("created_at")
+        }
+
+        serializer = GatewayStatusSerializer(gateway_status_instance, data=data, partial=True)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+
+        """Post Gateway Status Data"""
+        # Useful to have the POST function here if we want to add a new Status
+
+        data = {
+            'gateway': request.data.get('gateway'),
+            'hostname': request.data.get('hostname'),
+            'data_flow': request.data.get('data_flow'),
+            'os_name': request.data.get('os_name'),
+            'os_version': request.data.get('os_version'),
+            'firmware_version': request.data.get('firmware_version'),
+            'maio_edge_version': request.data.get('maio_edge_version'),
+            'created_at': request.data.get("created_at")
+        }
+        serializer = GatewayStatusSerializer(data=data)
         if not serializer.is_valid():
             return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
         serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 # End -- Gateway Status View Section
@@ -218,20 +272,174 @@ class GatewayStatusApiView(APIView):
 # Start Tag View Section
 # A more simplistic approach with DRF ModelViewSet
 
-class GatewayTagAPIView(ModelViewSet):
-    # Fetch data from the database
-    queryset = GatewayTag.objects.all()
-    serializer_class = GatewayTagSerializer
+class GatewayTagAPIView(APIView):
+    # authentication_classes = [SessionAuthentication, BasicAuthentication]
+    # permission_classes = [IsAuthenticated]
 
-    filter_backends = (DjangoFilterBackend,)
-    filterset_fields = [field.name for field in GatewayTag._meta.fields]
+    def get_gateway_tag_object(self, **kwargs):
+        if kwargs:
+            unit_types_filter = ['bool', 'Boolean', 'float', 'Float',
+                                 'int', 'Integer', 'str', 'String']
+            if kwargs['unit_type'] not in unit_types_filter:
+                return Response({"res": "Invalid Unit Type"},
+                                status=status.HTTP_400_BAD_REQUEST)
+            filter_dict = {k: v for k, v in kwargs}
+            try:
+                gateway_tag_object = GatewayTag.objects.filter(**filter_dict)
+                return gateway_tag_object, ''
+            except GatewayTag.DoesNotExist as gateway_tag_error:
+                return None, gateway_tag_error
+
+        else:
+            try:
+                gateway_tag_object = GatewayTag.objects.all()
+                return gateway_tag_object, ''
+            except GatewayTag.DoesNotExist as gateway_tag_error:
+                return None, gateway_tag_error.message
+
+    def get(self):
+        gateway_tag_instance, gateway_tag_error = self.get_gateway_tag_object()
+
+        if not gateway_tag_instance:
+            return Response(
+                {"res": "Gateway Tag Object with specified Parameters does not Exist"},
+                status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = GatewayTagSerializer(gateway_tag_instance)
+
+        if not serializer.is_valid():
+            return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request, **kwargs):
+        """Update Gateway Tag"""
+        unit_types_filter = ['bool', 'Boolean', 'float', 'Float', 'int',
+                             'Integer', 'str', 'String']
+        if kwargs:
+            if kwargs['unit_type'] not in unit_types_filter:
+                return Response({"res": "Invalid Unit Type"},
+                                status=status.HTTP_400_BAD_REQUEST)
+            else:
+                gateway_tag_instance = self.get_gateway_tag_object(**kwargs)
+        else:
+            gateway_tag_instance = self.get_gateway_tag_object()
+
+        if not gateway_tag_instance:
+            return Response(
+                {"res": "Gateway Tag Object with specified Paramaters does not Exist"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        data = {
+            'gateway': request.data.get('gateway'),
+            'data_flow': request.data.get('data_flow'),
+            'hardware_name': request.data.get('hardware_name'),
+            'unit_name': request.data.get('unit_name'),
+            'unit_type': request.data.get('unit_type'),
+            'status': request.data.get('status'),
+        }
+
+        serializer = GatewayTagSerializer(gateway_tag_instance, data=data, partial=True)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+
+        """Post Gateway Status Data"""
+        # Useful to have the POST function here if we want to add a new Status
+
+        data = {
+            'gateway': request.data.get('gateway'),
+            'data_flow': request.data.get('data_flow'),
+            'hardware_name': request.data.get('hardware_name'),
+            'unit_name': request.data.get('unit_name'),
+            'unit_type': request.data.get('unit_type'),
+            'status': request.data.get('status'),
+        }
+        serializer = GatewayTagSerializer(data=data)
+        if not serializer.is_valid():
+            return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 # End Tag view Section
 # Start Posse View Section
-class PosseApiView(ModelViewSet):
-    # Define model instance
-    model = Posse
+class PosseApiView(APIView):
+    # authentication_classes = [SessionAuthentication, BasicAuthentication]
+    # permission_classes = [IsAuthenticated]
 
-    queryset = model.objects.all()
-    serializer_class = PosseSerializer
+    def get_posse_object(self, **kwargs):
+        if kwargs:
+            filter_dict = {k: v for k, v in kwargs}
+            try:
+                posse_object = Posse.objects.filter(**filter_dict)
+                return posse_object, ''
+            except Posse.DoesNotExist as posse_error:
+                return None, posse_error
+
+        else:
+            try:
+                posse_object = Posse.objects.all()
+                return posse_object, ''
+            except Posse.DoesNotExist as posse_error:
+                return None, posse_error.message
+
+    def get(self):
+        posse_instance, posse_error = self.get_posse_object()
+
+        if not posse_instance:
+            return Response(
+                {"res": "Posse Object with specified Parameters does not Exist"},
+                status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = PosseSerializer(posse_instance)
+
+        if not serializer.is_valid():
+            return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request, **kwargs):
+        """Update Gateway Tag"""
+
+        if kwargs:
+            posse_instance = self.get_posse_object(**kwargs)
+        else:
+            posse_instance = self.get_posse_object()
+
+        if not posse_instance:
+            return Response(
+                {"res": "Gateway Tag Object with specified Paramaters does not Exist"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        data = {
+            'label': request.data.get('label'),
+        }
+
+        serializer = GatewayTagSerializer(posse_instance, data=data, partial=True)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+
+        """Post Gateway Status Data"""
+        # Useful to have the POST function here if we want to add a new Status
+
+        data = {
+            'label': request.data.get('label'),
+        }
+        serializer = PosseSerializer(data=data)
+        if not serializer.is_valid():
+            return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
