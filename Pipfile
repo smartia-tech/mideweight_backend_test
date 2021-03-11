@@ -8,6 +8,7 @@ Django = "==2.2.18"
 djangorestframework = "*"
 drf-yasg = "*"
 django-filter = "*"
+gunicorn = "*"
 
 [dev-packages]
 
