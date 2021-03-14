@@ -51,7 +51,7 @@ class Gateway(DataSource):
                 name="label_serial_number"
             )
         ]
-
+"""
     @property
     def queue_name(self):
         return 'gateway_{serial}_{id}'.format(
@@ -68,7 +68,7 @@ class Gateway(DataSource):
         if gateway_status.count() > 0:
             return gateway_status.latest('created_at').data_flow
         return False
-
+"""
 
 class GatewayStatus(DataSourceBaseModel):
     gateway = models.ForeignKey(Gateway, on_delete=models.CASCADE)
