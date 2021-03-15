@@ -13,9 +13,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+# DRF and Django Imports
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+# Import Views
+from data_sources import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/gateway_tags/', views.GatewayTagAPIView.as_view(), name='gateway_tags'),
+    path('api/gateways/', views.GatewayApiView.as_view(), name='gateways'),
+    path('api/gateway_per_client/', views.ClientGatewayApiView.as_view(), name='gateway_per_client'),
+    path('api/gateway_status/', views.GatewayStatusApiView.as_view(), name='gateway_status'),
+    path('api/posse/', views.PosseApiView.as_view(), name='posse'),
+
 ]
