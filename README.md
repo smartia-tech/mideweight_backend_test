@@ -1,3 +1,8 @@
+-----------------------
+**This file has been left unchanged** See [MySolution](MySolution.md) for documentation of my solution. 
+
+-----------------------
+
 # The API - Smartia Backend Developer Challenge
 
 Thank you for thinking about us, but we've received enough applications by now and are not looking for more, as we are confident that there is at least one winner among all the candidates who have responded with their pull requests.
