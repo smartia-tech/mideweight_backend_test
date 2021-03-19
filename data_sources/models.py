@@ -83,6 +83,8 @@ class GatewayStatus(DataSourceBaseModel):
 
     class Meta:
         get_latest_by = 'created_at'
+        verbose_name = 'Gateway Status'
+        verbose_name_plural = 'Gateway Statuses'
 
 
 class AbstractTag(DataSourceBaseModel):
@@ -121,6 +123,8 @@ class GatewayTag(AbstractTag):
                               max_length=20)
 
     class Meta:
+        verbose_name = 'Gateway Tag'
+        verbose_name_plural = 'Gateway Tags'
         constraints = [
             models.UniqueConstraint(
                 fields=['gateway_id', 'label'],
