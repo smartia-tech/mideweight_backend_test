@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'data_sources',
+    'rest_framework',  # DRF https://www.django-rest-framework.org/#installation
+    'drf_yasg',  # Generate Swagger documentation https://github.com/axnsan12/drf-yasg/#validation
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -78,7 +81,7 @@ WSGI_APPLICATION = 'mideweight_backend_test.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': f"{BASE_DIR}/db.sqlite3",
     }
 }
 
@@ -120,3 +123,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 20,
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
