@@ -76,7 +76,7 @@ grow, and thus you are honest about parts which may not be your best.
 
 ### Submission
 Once you are ready, submit a pull-request with your solution and shoot us an 
-email to our head of engineering at `tymoteusz.paul@smartia.tech` with a link 
+email to our chief technology officer at `mark.ward@smartia.tech` with a link 
 to your pull-request and copy of your up-to-date CV. We will then schedule a 
 video call with You as soon as we receive it to present your solution 
 (this call usually lasts about 1-2 hours, as we want to get to know one
