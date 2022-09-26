@@ -1,1 +1,13 @@
 Django==2.2.18
+
+# REST API support over Django
+# https://www.django-rest-framework.org/#installation
+djangorestframework==3.12.2
+
+
+# Generate Swagger Documention
+# https://github.com/axnsan12/drf-yasg
+drf-yasg==1.20.0
+
+# Filtering support
+django-filter==2.4.0
