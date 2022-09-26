@@ -69,6 +69,10 @@ class Gateway(DataSource):
             return gateway_status.latest('created_at').data_flow
         return False
 
+    @property
+    def status(self):
+        return self.gatewaystatus_set.all()
+
 
 class GatewayStatus(DataSourceBaseModel):
     gateway = models.ForeignKey(Gateway, on_delete=models.CASCADE)
