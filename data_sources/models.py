@@ -71,7 +71,8 @@ class Gateway(DataSource):
 
 
 class GatewayStatus(DataSourceBaseModel):
-    gateway = models.ForeignKey(Gateway, on_delete=models.CASCADE)
+    gateway = models.ForeignKey(
+        Gateway, on_delete=models.CASCADE)
     hostname = models.CharField(max_length=255,
                                 validators=[MinLengthValidator(limit_value=3)])
     data_flow = models.BooleanField()
