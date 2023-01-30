@@ -31,8 +31,8 @@ class DataSource(DataSourceBaseModel):
 
 
 class Gateway(DataSource):
-    label = models.CharField(max_length=100, validators=[
-        MinLengthValidator(limit_value=3)])
+    label = models.CharField(max_length=100,
+                             validators=[MinLengthValidator(limit_value=3)])
     posse = models.ForeignKey(Posse, on_delete=models.CASCADE)
     location = models.CharField(max_length=100)  # Removal with #2mcytb
     # TODO(#2pfzca): Verify the correctness of client_id when saving
@@ -40,23 +40,20 @@ class Gateway(DataSource):
     # is invalid, then the Gateway will not be able to connect with
     # maio-engine.
     oauth2_client_id = models.CharField(max_length=100, unique=True)
-    serial_number = models.CharField(max_length=255, validators=[
-        MinLengthValidator(limit_value=3)])
+    serial_number = models.CharField(
+        max_length=255, validators=[MinLengthValidator(limit_value=3)])
     type_name = "Machine Gateway"
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(
-                fields=['label', 'serial_number'],
-                name="label_serial_number"
-            )
+            models.UniqueConstraint(fields=['label', 'serial_number'],
+                                    name="label_serial_number")
         ]
 
     @property
     def queue_name(self):
-        return 'gateway_{serial}_{id}'.format(
-            serial=self.serial_number,
-            id=self.id)
+        return 'gateway_{serial}_{id}'.format(serial=self.serial_number,
+                                              id=self.id)
 
     @property
     def tags(self):
@@ -122,14 +119,12 @@ class GatewayTag(AbstractTag):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(
-                fields=['gateway_id', 'label'],
-                name="gateway and label "
-                     "should be unique in GatewayTag."),
-            models.UniqueConstraint(
-                fields=['gateway_id', 'hardware_name'],
-                name="gateway and hardware_name "
-                     "should be unique in GatewayTag."),
+            models.UniqueConstraint(fields=['gateway_id', 'label'],
+                                    name="gateway and label "
+                                    "should be unique in GatewayTag."),
+            models.UniqueConstraint(fields=['gateway_id', 'hardware_name'],
+                                    name="gateway and hardware_name "
+                                    "should be unique in GatewayTag."),
         ]
 
     def __str__(self):
